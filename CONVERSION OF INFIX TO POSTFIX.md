@@ -1,59 +1,63 @@
-# Exp.No:33  
-## POSTFIX EVALUATION
+# Exp.No:13a  
+## CONVERSION OF INFIX TO POSTFIX
 
 ---
 
 ### AIM  
-To write a Python program to evaluate a user-given Postfix expression that contains Multiplication and Addition operators using the stack concept.
+To write a Python program to convert a given Infix expression to Postfix expression by following the precedence and associative rules. The input expression contains only Division, Subtraction, and Bitwise AND operators. A dictionary is used to set the priority for operators, and a set is used to hold the operators used in the given expression.
 
 ---
 
 ### ALGORITHM
 
 1. **Start the program.**
-2. Define a set named `OPERATORS` containing all the valid operators: `*, +, **, -, /, %`.
-3. Define a function `evaluate_postfix(exp)` to evaluate the postfix expression:
-   - Inside the function, create an empty list called `stack` to store operands and intermediate results.
-4. Loop through each item in the given postfix expression:
-   - If the current item is **not in OPERATORS**, it is an operand, so append it to the stack.
-   - If the current item is an **operator**:
-     - Pop the top two elements from the stack (first pop is `a`, second pop is `b`).
-     - Perform the operation `b <operator> a` depending on the current operator.
-     - Store the result in a variable called `result`.
-     - Append the result back to the stack.
-5. After the loop ends, return the first element of the stack as the final evaluation result.
-6. Take a postfix expression as input from the user.
-7. Print the postfix expression.
-8. Call the function `evaluate_postfix()` with the input and print the result.
-9. **End the program.**
+2. **Initialize an empty stack** and an empty output string.
+3. **Iterate through each character** in the infix expression:
+   - If the character is **not an operator**, append it directly to the output string.
+   - If the character is an **open parenthesis '('**, push it onto the stack.
+   - If the character is a **close parenthesis ')'**, pop from the stack and append to the output until encountering a left parenthesis '('.
+   - If the character is an **operator**, handle it based on precedence:
+     - While there’s an operator at the top of the stack with higher or equal precedence, pop the stack and append those operators to the output.
+     - Push the current operator onto the stack.
+4. **Use a priority dictionary** to define operator precedence, ensuring higher precedence operators are placed before lower precedence ones.
+5. Once the expression is fully processed, continue popping any remaining operators from the stack and append them to the output.
+6. **Return the final postfix expression.**
+7. **Print the result.**
+8. **End the program.**
 
 ---
 
 ### PROGRAM
 
 ```python
-OPERATORS=set(['*','+']) 
-def evaluate_postfix(expression):
-    stack=[]
-    for i in expression:
-        if i not in OPERATORS:
-            stack.append(i)
+Operators = set(['%','*','*','|','(',')'])  
+Priority = {'|':1,'*':2,'%':2}
+def infixToPostfix(expression): 
+    stack = [] 
+    output = ''
+    for character in expression:
+        if character not in Operators:
+            output+=character
+        elif character =='(':
+            stack.append('(')
+        elif character == ')':
+            while stack and stack[-1]!='(':
+                output+=stack.pop()
+            stack.pop()
         else:
-            a=stack.pop()
-            b=stack.pop()
-            if i=='*':
-                r=int(b)*int(a)
-            elif i=='+':
-                r=int(b)+int(a)
-            stack.append(r)
-    return stack[0]
-expression = input()
-print("postfix expression: ",expression)
-print("Evaluation result: ",evaluate_postfix(expression))
+            while stack and stack[-1]!='(' and Priority[character]<=Priority[stack[-1]]:
+                output+=stack.pop()
+            stack.append(character)
+    while stack:
+        output+=stack.pop()
+    return output
+expression =input()
+print("infix notation: ",expression)
+print("postfix notation: ",infixToPostfix(expression))
 ```
 
 ### OUTPUT
-<img width="1181" height="212" alt="image" src="https://github.com/user-attachments/assets/d553f1f8-e86e-4a1b-aa92-ac970f5d6635" />
+<img width="1186" height="215" alt="image" src="https://github.com/user-attachments/assets/5315c720-87e8-4bb7-b765-ab52661abb22" />
 
 ### RESULT
-Therefore, the output is the example to write a Python program to evaluate a user-given Postfix expression that contains Multiplication and Addition operators using the stack concept.
+Therefore, the output is the example to write a Python program to convert a given Infix expression to Postfix expression by following the precedence and associative rules. The input expression contains only Division, Subtraction, and Bitwise AND operators. A dictionary is used to set the priority for operators, and a set is used to hold the operators used in the given expression.
